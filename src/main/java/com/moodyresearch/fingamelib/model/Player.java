@@ -25,6 +25,20 @@ public class Player {
 		this.name = name;
 		
 	}
+	
+	public SalesOrder buyOrder(Stock s, int qty, BigDecimal offerPrice) {
+		
+		cash = cash.subtract(offerPrice.multiply(BigDecimal.valueOf(qty)));
+		return new SalesOrder(this,s,qty,"buy", offerPrice);
+		
+	}
+	
+	public void printHoldings() {
+		
+		for(int i = 0; i < holdings.size();i++) {
+			System.out.println(holdings.get(i).getStock().getSymbol() + " " + holdings.get(i).getQuantity());
+		}
+	}
 
 	public ArrayList<StockHolding> getHoldings() {
 		return holdings;

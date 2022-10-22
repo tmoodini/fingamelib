@@ -10,6 +10,7 @@ public class SalesOrder {
 	private int quantity;
 	private String orderType;
 	private BigDecimal pricePerShare;
+	private String status;
 	
 	public SalesOrder() {
 		
@@ -70,6 +71,14 @@ public class SalesOrder {
 
 	public void setPricePerShare(BigDecimal pricePerShare) {
 		this.pricePerShare = pricePerShare;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 	
 	

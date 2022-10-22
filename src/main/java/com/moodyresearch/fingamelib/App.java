@@ -29,15 +29,28 @@ public class App
         
         Player house = new Player();
         house.setName("House");
+        house.setCash(new BigDecimal(100));
+        
+        Player player1 = new Player();
+        player1.setName("Bob");
+        
+        player1.setCash(new BigDecimal(100));
+        
+        
         
         for(int i =0; i <5; i++) {
         	house.getHoldings().add(new StockHolding(stocks[i], stocks[i].getPrice(), stocks[i].getSharesOutstanding()));
         	m.addSalesOrder(new SalesOrder(house, stocks[i], 
-        			stocks[i].getSharesOutstanding(), "sell", stocks[i].getPrice()));
+        			stocks[i].getSharesOutstanding(),"sell", stocks[i].getPrice()));
         	
         }
+        SalesOrder bo = player1.buyOrder(s1, 50, new BigDecimal(1.00));
         
-        m.printMarket();
+        m.addSalesOrder(bo);
+        System.out.println(player1.getCash());
+        System.out.println(house.getCash());
+        player1.printHoldings();
+        //m.printMarket();
         
         
     }
