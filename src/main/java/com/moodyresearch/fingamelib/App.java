@@ -17,7 +17,7 @@ public class App
     public static void main( String[] args )
     {
     	Market m = new Market();
-        System.out.println( "Hello World!" );
+        
         Stock s1 = new Stock(new BigDecimal(1.00),"ABC Inc","abc",100);
         Stock s2 = new Stock(new BigDecimal(1.00),"Bobs PCs","bpc",100);
         Stock s3 = new Stock(new BigDecimal(1.00),"Cathy Clean","cci",100);
@@ -46,11 +46,24 @@ public class App
         }
         SalesOrder bo = player1.buyOrder(s1, 50, new BigDecimal(1.00));
         
+        
+        
+        
+        
         m.addSalesOrder(bo);
-        System.out.println(player1.getCash());
-        System.out.println(house.getCash());
+        
+        System.out.println("Player 1 cash:" + player1.getCash());
+        System.out.println("House cash:" + house.getCash());
+        //System.out.print("Player 1 holdings: ");
         player1.printHoldings();
-        //m.printMarket();
+        
+        SalesOrder so1 = player1.sellOrder(player1.getHoldingBySymbol(s1), 50, new BigDecimal(1.00));
+        m.addSalesOrder(so1);
+        
+        //System.out.print("Player 1 holdings: ");
+        player1.printHoldings();
+       // player1.printHoldings();
+        m.printMarket();
         
         
     }

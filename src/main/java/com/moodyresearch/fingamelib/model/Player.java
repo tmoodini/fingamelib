@@ -33,10 +33,30 @@ public class Player {
 		
 	}
 	
+	public SalesOrder sellOrder(StockHolding s, int qty, BigDecimal offerPrice) {
+		
+		//cash = cash.subtract(offerPrice.multiply(BigDecimal.valueOf(qty)));
+		s.setQuantity(s.getQuantity() - qty);
+		System.out.println(this.getName() + " Holding ");
+		return new SalesOrder(this,s.getStock(),qty,"sell", offerPrice);
+		
+	}
+	
+	public StockHolding getHoldingBySymbol(Stock stock) {
+		
+		for(int i = 0; i < holdings.size();i++) {
+			if(stock.getSymbol().equals(holdings.get(i).getStock().getSymbol())) {
+				return holdings.get(i);
+			}
+		}
+		
+		return new StockHolding();
+	}
+	
 	public void printHoldings() {
 		
 		for(int i = 0; i < holdings.size();i++) {
-			System.out.println(holdings.get(i).getStock().getSymbol() + " " + holdings.get(i).getQuantity());
+			System.out.println("Player " + this.getName() +"  holdings: " + holdings.get(i).getStock().getSymbol() + " " + holdings.get(i).getQuantity());
 		}
 	}
 

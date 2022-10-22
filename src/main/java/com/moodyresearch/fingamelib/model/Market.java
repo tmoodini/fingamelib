@@ -17,12 +17,21 @@ public class Market {
 		if(order.getOrderType() == "buy") {
 			if(this.processBuyOrder(order)) {
 				order.setStatus("complete");
+				
 			}
 			
 		}
 		
+		if(order.getOrderType() == "sell") {
+			if(this.processSellOrder(order)) {
+				order.setStatus("complete");
+			}
+			
+		}
 		
+		if(order.getQuantity() > 0) {
 		this.market.add(order);
+		}
 		
 	}
 	
@@ -39,7 +48,7 @@ public class Market {
 			if(market.get(i).getStock().getSymbol().equals( s.getStock().getSymbol())
 					&& market.get(i).getOrderType().equals("sell"))
 			{
-				System.out.println("FOUND MATCH");
+				
 				return market.get(i);
 			}//end if
 		}//end for
@@ -61,7 +70,10 @@ public class Market {
 		NumberFormat currency = NumberFormat.getCurrencyInstance();
 		for(int i = 0; i < market.size(); i++) {
 			System.out.println(market.get(i).getStock().getSymbol() 
-					+ " " + currency.format(market.get(i).getPricePerShare()));
+					+ " " + currency.format(market.get(i).getPricePerShare()) + " " +
+							market.get(i).getOrderType() + " " +
+					 		market.get(i).getQuantity() + " " +
+							market.get(i).getPlayer().getName());
 		}
 	}
 	
@@ -74,9 +86,35 @@ public class Market {
 				BigDecimal sellerGain = so.getPricePerShare().multiply(BigDecimal.valueOf(so.getQuantity()));
 				seller.setCash(seller.getCash().add(sellerGain));
 				
+				
 				StockHolding sh = new StockHolding(so.getStock(),so.getPricePerShare(),so.getQuantity());
 				so.getPlayer().getHoldings().add(sh);
-				System.out.println("FOUND MATCH");
+				market.get(i).setQuantity(market.get(i).getQuantity() - so.getQuantity());
+				so.setQuantity(0);
+				if(market.get(i).getQuantity() == 0) {
+					market.remove(i);
+				}
+				
+				return true;
+			}//end if
+	}
+		return false;
+	}
+	
+	private boolean processSellOrder(SalesOrder so) {
+		for(int i = 0; i < market.size();i++) {
+			if(market.get(i).getStock().getSymbol().equals( so.getStock().getSymbol())
+					&& market.get(i).getOrderType().equals("buy"))
+			{
+				Player seller = so.getPlayer();
+				BigDecimal sellerGain = so.getPricePerShare().multiply(BigDecimal.valueOf(so.getQuantity()));
+				seller.setCash(seller.getCash().add(sellerGain));
+				
+				
+				StockHolding sh = new StockHolding(so.getStock(),so.getPricePerShare(),so.getQuantity());
+				market.get(i).getPlayer().getHoldings().add(sh);
+				market.get(i).setQuantity(market.get(i).getQuantity() - so.getQuantity());
+				
 				return true;
 			}//end if
 	}
