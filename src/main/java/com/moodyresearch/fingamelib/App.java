@@ -63,6 +63,8 @@ public class App
         //System.out.print("Player 1 holdings: ");
         player1.printHoldings();
        // player1.printHoldings();
+        System.out.println("Player 1 cash:" + player1.getCash());
+        System.out.println("House cash:" + house.getCash());
         m.printMarket();
         
         

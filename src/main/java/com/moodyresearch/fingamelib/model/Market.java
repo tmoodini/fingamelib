@@ -77,20 +77,29 @@ public class Market {
 		}
 	}
 	
-	private boolean processBuyOrder(SalesOrder so) {
+	private boolean processBuyOrder(SalesOrder bo) {
+		
+		
 		for(int i = 0; i < market.size();i++) {
-			if(market.get(i).getStock().getSymbol().equals( so.getStock().getSymbol())
-					&& market.get(i).getOrderType().equals("sell"))
+			
+			SalesOrder sellOrder = market.get(i);
+			if(sellOrder.getStock().getSymbol().equals( bo.getStock().getSymbol())
+					&& sellOrder.getOrderType().equals("sell") )
 			{
+				
+				
+				//set seller cash
 				Player seller = market.get(i).getPlayer();
-				BigDecimal sellerGain = so.getPricePerShare().multiply(BigDecimal.valueOf(so.getQuantity()));
+				BigDecimal sellerGain = bo.getPricePerShare().multiply(BigDecimal.valueOf(bo.getQuantity()));
 				seller.setCash(seller.getCash().add(sellerGain));
 				
+				//set buyer holdings
+				StockHolding sh = new StockHolding(bo.getStock(),bo.getPricePerShare(),bo.getQuantity());
+				bo.getPlayer().getHoldings().add(sh);
+				market.get(i).setQuantity(market.get(i).getQuantity() - bo.getQuantity());
 				
-				StockHolding sh = new StockHolding(so.getStock(),so.getPricePerShare(),so.getQuantity());
-				so.getPlayer().getHoldings().add(sh);
-				market.get(i).setQuantity(market.get(i).getQuantity() - so.getQuantity());
-				so.setQuantity(0);
+				
+				
 				if(market.get(i).getQuantity() == 0) {
 					market.remove(i);
 				}
@@ -114,11 +123,21 @@ public class Market {
 				StockHolding sh = new StockHolding(so.getStock(),so.getPricePerShare(),so.getQuantity());
 				market.get(i).getPlayer().getHoldings().add(sh);
 				market.get(i).setQuantity(market.get(i).getQuantity() - so.getQuantity());
-				
+				if(market.get(i).getQuantity() == 0) {
+					market.remove(i);
+				}
 				return true;
 			}//end if
 	}
 		return false;
+	}
+
+	public ArrayList<SalesOrder> getMarket() {
+		return market;
+	}
+
+	public void setMarket(ArrayList<SalesOrder> market) {
+		this.market = market;
 	}
 
 }
